@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear {{ obj }}</title>
+</head>
+<body>
+<form action="/create-{{obj}}/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Create {{ obj }}">
+</form>
+
+{% if obj == 'game' %}
+    <h2>Partidas creados en la última hora</h2>
+    {% for g in list %}
+        <p><a href="/create-team?gameId={{ g.id }}">{{ g.id }}</a></p>
+    {% endfor %}
+{% endif %}
+
+{% if obj == 'team' %}
+    <h2>Equipos en esta partida</h2>
+    {% for g in list %}
+        <p><a href="/create-person?teamId={{ g.id }}">{{ g.name }}</a></p>
+    {% endfor %}
+{% endif %}
+
+<p></p>
+</body>
+</html>
