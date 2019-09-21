@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from tabuCode import views
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from tabu import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,5 +27,8 @@ urlpatterns = [
     path('create-game/', views.create_game),
     path('create-team/', views.create_team),
     path('create-person/', views.create_person),
+    path('waiting/', views.waiting),
 
 ]
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

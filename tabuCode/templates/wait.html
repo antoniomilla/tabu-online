@@ -1,0 +1,24 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Esperando a otros picaitos..</title>
+
+
+</head>
+<body>
+<h1>Esperando picaitos</h1>
+{% for t in teams %}
+    <h2><u>{{ t.name }}</u></h2>
+    {% for p in persons %}
+        {% if p.team_id == t.id %}
+            <h4>{{ p.first_name }}</h4>
+        {% endif %}
+    {% endfor %}
+    <br>
+{% endfor %}
+<input type="button"value="Empezar partida" id="empezar"/>
+<script type="text/javascript" src="/js/wating.js" ></script>
+</body>
+</html>
+

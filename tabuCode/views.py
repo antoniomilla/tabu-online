@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from .forms import GameForm, TeamForm, PersonForm
 from .models import Game,Team,Person
 from datetime import datetime,timedelta
+import numpy
 
 
 def index(request):
@@ -68,10 +69,29 @@ def create_person(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            redirect=HttpResponseRedirect('/waiting/')
+            redirect.set_cookie('idPerson', person.id)
+            return redirect
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = PersonForm({'team': request.GET['teamId']})
+        persons = Person.objects.filter(team_id=request.GET['teamId'])
+        form = PersonForm({'team': request.GET['teamId'], 'first_name': 'j1'})
 
-    return render(request, 'form.html', {'form': form, 'obj': 'person'})
+    return render(request, 'form.html', {'form': form, 'obj': 'person', 'list': persons})
+
+
+def waiting(request):
+    idp = request.COOKIES['idPerson']
+    team = Person.objects.get(id=idp).team
+    game = team.game
+    teams = Team.objects.filter(game_id=game.id)
+    persons=[]
+    for t in teams:
+        persons.append(Person.objects.filter(team_id=t.id))
+    flat_list = [item for sublist in persons for item in sublist]
+    print(flat_list)
+    return render(request, 'wait.html', {'teams': teams, 'persons': flat_list})
+
+
+

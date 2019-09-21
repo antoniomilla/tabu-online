@@ -25,6 +25,14 @@
     {% endfor %}
 {% endif %}
 
+{% if obj == 'person' %}
+    <h2>Tus futuros compañeros:</h2>
+    {% for g in list %}
+        <p>{{ g.first_name }}</p>
+    {% endfor %}
+    <br>
+{% endif %}
+
 <p></p>
 </body>
 </html>
