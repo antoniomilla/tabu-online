@@ -27,7 +27,7 @@ class PersonForm(forms.ModelForm):
 
     class Meta:
         model = Person
-        fields = (['first_name', 'game'])
+        fields = (['first_name', 'team'])
         widgets = {
-            'game': forms.HiddenInput(),
+            'team': forms.HiddenInput(),
         }

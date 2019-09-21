@@ -19,7 +19,9 @@ from tabuCode import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',views.index),
     path('create-game/', views.create_game),
     path('create-team/', views.create_team),
+    path('create-person/', views.create_person),
 
 ]

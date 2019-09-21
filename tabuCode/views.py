@@ -5,6 +5,10 @@ from .models import Game,Team,Person
 from datetime import datetime,timedelta
 
 
+def index(request):
+    return HttpResponseRedirect('create-game')
+
+
 def create_game(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -41,7 +45,7 @@ def create_team(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            return HttpResponseRedirect('/create-person?teamId='+str(team.id))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -68,7 +72,6 @@ def create_person(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
+        form = PersonForm({'team': request.GET['teamId']})
 
-        form = TeamForm({'game': request.GET['gameId'], 'name': 'e'+str(len(teams)+1)})
-
-    return render(request, 'form.html', {'form': form, 'obj': 'team', 'list': teams})
+    return render(request, 'form.html', {'form': form, 'obj': 'person'})
