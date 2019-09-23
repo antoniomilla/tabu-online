@@ -3,6 +3,17 @@ from django.db import models
 
 class Game(models.Model):
     created = models.DateTimeField(auto_now_add=True)
+    started = models.BooleanField(default=False)
+    orderSelected = models.BooleanField(default=False)
+    def get_teams(self):
+        return Team.objects.filter(game_id=self.id)
+
+    def get_players(self):
+        players = []
+        for t in self.get_teams():
+            for p in t.get_players():
+                players.append(p.id)
+        return Person.objects.filter(id__in=players)
 
     def __str__(self):
         cad = ""
@@ -14,7 +25,7 @@ class Game(models.Model):
         if cad == "":
             return str(self.id)
         else:
-            return cad[0:len(cad)-4]
+            return cad[0:len(cad) - 4]
 
 
 class Team(models.Model):
@@ -22,19 +33,17 @@ class Team(models.Model):
     points = models.IntegerField(default=0)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
 
+    def get_players(self):
+        return Person.objects.filter(team_id=self.id)
+
     def __str__(self):
-        return self.name + "|"+str(self.game_id)
+        return self.name + "|" + str(self.game_id)
 
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
+    orden = models.IntegerField(default=0);
 
     def __str__(self):
         return self.first_name
-
-
-
-
-
-

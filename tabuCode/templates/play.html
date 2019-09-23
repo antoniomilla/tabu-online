@@ -1,0 +1,40 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Esperando a otros picaitos..</title>
+
+<script>order={}; contents={};</script>
+</head>
+<body>
+<h1 id="titulo">Esperando picaitos</h1>
+<div id = "equipos">
+
+{% comment %}{% for t in teams %}
+    <h2><u>{{ t.name }}</u></h2>
+    {% for p in persons %}
+        {% if p.team_id == t.id %}
+            <h4>{{ p.first_name }}</h4>
+        {% endif %}
+    {% endfor %}
+    <br>
+{% endfor %}{% endcomment %}
+</div>
+<div id = "ordenar" >
+    <br><br>
+</div>
+
+<input type="button"value="Empezar partida" id="empezar"/>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script>var game = {{ game }}
+    console.log(order);
+
+
+</script>
+<script type="text/javascript" src="/js/play.js" ></script>
+</body>
+</html>
+

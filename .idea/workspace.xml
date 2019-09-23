@@ -2,14 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="374cbdaa-5e97-4708-ae23-fcdafa5b58ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/wating.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tabuCode/templates/wait.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/play.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tabuCode/templates/play.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/wating.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tabu/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tabu/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabuCode/templates/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/templates/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/templates/wait.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tabuCode/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,6 +56,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="jsx.switch.disabled" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -113,6 +115,9 @@
       <updated>1569029672624</updated>
       <workItem from="1569029677164" duration="7891000" />
       <workItem from="1569071515250" duration="11966000" />
+      <workItem from="1569096731523" duration="5171000" />
+      <workItem from="1569118303759" duration="1262000" />
+      <workItem from="1569185988678" duration="17413000" />
     </task>
     <servers />
   </component>
@@ -124,7 +129,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
