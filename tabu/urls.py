@@ -30,6 +30,7 @@ urlpatterns = [
     path('ajax/start-game', views.start_game),
     path('ajax/getGameStatus', views.get_game_status),
     path('ajax/saveOrder', views.save_order),
+    path('ajax/saveTimer', views.save_timer),
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

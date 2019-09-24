@@ -1,7 +1,21 @@
 $(document).ready(function () {
+    function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+    }
+
+    let pending = false;
+
+
+    if (getCookie("isMaster") == 'True') {
+        $("#empezar").removeAttr("disabled");
+    }
+    getStatus();
     let localgame = {
         started: false,
         orderSelected: false,
+        turnMoment: new Date().getTime() ,
 
     }
     $.ajaxSetup({
@@ -45,123 +59,233 @@ $(document).ready(function () {
 
     });
 
+    function checkStart() {
+        $("#counter").text("20");
+        startCountdown();
+    }
+
+    function startCountdown() {
+        function countdown() {
+            console.log()
+            if (20*1000 - (new Date().getTime() - localgame['turnMoment']) <= 1000)
+            {
+                //si la cuenta ha terminado
+                clearInterval(localgame['countdownInterval']);
+
+            }
+        else
+            {
+                //si la cuenta sigue
+                $("#counter").text((20*1000 - (new Date().getTime() - localgame['turnMoment']))/1000 );
+            }
+
+        }
+
+        localgame['countdownInterval'] = setInterval(countdown, 1000);
+
+    }
+
+    function checkTurno(turno) {
+
+
+        if (turno > localgame['turnMoment']) {
+            localgame['turnMoment'] = turno;
+            console.log(turno - new Date().getTime())
+            setTimeout(checkStart, turno - new Date().getTime());
+
+
+        }
+    }
+
+    $("#empezarturno").click(function () {
+        //marcar hora de empezado
+        var t = new Date();
+        //subir t a la api para que se lo diga a los demas
+        let timer = Math.floor(t.getTime() ) + 10*1000;
+        //cojo t de la api
+        //localgame['momentInterval'] = setInterval(checkStart, 200)
+
+        $.ajax({
+            url: '/ajax/saveTimer?gameId=' + game,
+            method: 'POST',
+            data: {
+                timer: timer,
+
+            },
+            success: function (data) {
+                console.log("Petición de nuevo turno aceptada.")
+            },
+
+        });
+
+    });
+
+
     let initInterval = setInterval(getStatus, 4000);
 
 
     async function getStatus() {
-        $.ajax({
-            url: '/ajax/getGameStatus?gameId=' + game,
-            method: 'GET',
-            success: function (data) {
-                if (data['started'] == true) {
-                    if (data['orderSelected'] == false) {
+        if (pending == false) {
+            pending = true;
 
-                        if (localgame['started'] == false) {
-                            selectOrder(JSON.parse(data['players']));
-                            /*A partir de aqui hemos empezado la partida, iniciamos marcadores y ponemos tiempos*/
-                            /*obtener equipos y jugadores por ajax*/
-                            alert("empezamos el juego!");
-                            localgame['started'] = true;
+            $.ajax({
+                url: '/ajax/getGameStatus?gameId=' + game,
+                method: 'GET',
+                success: function (data) {
+                    //solo envia petición si la última ya se ha completado
+                    pending = false;
+                    if (data['started'] == true) {
+                        if (data['orderSelected'] == false) {
+
+                            if (localgame['started'] == false) {
+                                selectOrder(JSON.parse(data['players']));
+                                /*A partir de aqui hemos empezado la partida, iniciamos marcadores y ponemos tiempos*/
+                                /*obtener equipos y jugadores por ajax*/
+                                alert("empezamos el juego!");
+                                localgame['started'] = true;
+                            }
+                        } else {
+                            //ha empezado y se ha elegido el orden: empezamos partida
+                            initGame();
+
+
                         }
                     } else {
-                        //ha empezado y se ha elegido el orden
-                        initGame();
-
+                        //si el juego no ha empezado muestra los nuevos jugadores cuando vayan llegando
+                        updateTeams(JSON.parse(data['teams']), JSON.parse(data['players']));
 
                     }
-                } else {
-                    //si el juego no ha empezado muestra los nuevos jugadores cuando vayan llegando
-                    updateTeams(JSON.parse(data['teams']), JSON.parse(data['players']));
-
-                }
 
 
-            },
+                },
 
-        });
+            });
+        }
     }
 
     window.enviarOrden = function () {
         if (confirm("¿Quieres guardar el orden? Después no se podrá cambiar."))
-            console.log("clicked");
-        $.ajax({
-            url: '/ajax/saveOrder?gameId=' + game,
-            method: 'POST',
-            data: order,
-            success: function (data) {
-                console.log("orden enviado correctamente");
-            },
+            $.ajax({
+                url: '/ajax/saveOrder?gameId=' + game,
+                method: 'POST',
+                data: order,
+                success: function (data) {
+                    console.log("orden enviado correctamente");
+                },
 
-        });
+            });
     };
 
     function selectOrder(players) {
-        //oculta boton empezar:
+        //muestra pantalla de seleccion de orden
         let innerhtml = "";
         $("#empezar").hide();
         $("#equipos").hide();
         $("#titulo").text("Selección de turnos");
-        for (let j = 0; j < players.length; j++) {
-            let pf = players[j].fields;
-            innerhtml = innerhtml + tagat("p", "id=" + pf.orden, pf.first_name);
-            if (pf.orden != 1)
-                innerhtml = innerhtml + tagat("button", "onClick='arriba(" + pf.orden + ")'", "arriba");
-            if (pf.orden != players.length)
-                innerhtml = innerhtml + tagat("button", "onClick='abajo(" + pf.orden + ")'", "abajo");
-            order[pf.orden] = players[j].pk;
-            contents[players[j].pk] = pf.first_name;
-        }
-        innerhtml += "<br><br>";
-        innerhtml += '<button id="enviarOrden" onclick="enviarOrden()"> Guardar orden</button>\n';
+        if (getCookie("isMaster") == "True") {
+            //si eres el master ordenas jugadores
+            for (let j = 0; j < players.length; j++) {
+                let pf = players[j].fields;
+                innerhtml = innerhtml + tagat("p", "id=" + pf.orden, pf.first_name);
+                if (pf.orden != 1)
+                    innerhtml = innerhtml + tagat("button", "onClick='arriba(" + pf.orden + ")'", "arriba");
+                if (pf.orden != players.length)
+                    innerhtml = innerhtml + tagat("button", "onClick='abajo(" + pf.orden + ")'", "abajo");
+                order[pf.orden] = players[j].pk;
+                contents[players[j].pk] = pf.first_name;
+            }
+            innerhtml += "<br><br>";
+            innerhtml += '<button id="enviarOrden" onclick="enviarOrden()"> Guardar orden</button>\n';
 
-        $("#ordenar").html(innerhtml);
+            $("#ordenar").html(innerhtml);
+        } else {
+            //si no eres el master muestra aviso
+            $("#ordenar").html("<p>El anfitrión está eligiendo el orden de los jugadores</p>");
+        }
+
     }
 
-        function initGame() {
+    function initGame() {
 
-            clearInterval(initInterval);
-            $("#empezar").hide();
-            $("#equipos").hide();
-            $("#titulo").text("Partida en marcha");
-            $("#ordenar").hide();
-
-            //definir nueva ajax con actualizacion de puntos y turnos, nuevo set interval
-            //definir jugador master como propiedad y que este elija el orden
-            //implementar sumador y restador de puntos para el siguiente del que le toca
-            //implementar cronometro y sonido tilin
-            //CSS
-            //Proyecto más ambicioso: Añadir las cartas del tabú al juego.
+        clearInterval(initInterval);
+        $("#empezar").hide();
+        $("#equipos").hide();
+        $("#titulo").text("Partida en marcha");
+        $("#ordenar").hide();
+        gameTick();
+        setInterval(gameTick, 300);
 
 
-        }
+    }
 
-        function updateTeams(teams, players) {
-            let innerhtml = "";
-            console.log(players);
-            for (var i = 0; i < teams.length; i++) {
-                let f = teams[i].fields;
-                innerhtml = innerhtml + tag("h2", "Equipo: " + f.name);
-                for (let j = 0; j < players.length; j++) {
-                    let fp = players[j].fields;
-                    if (fp.team == teams[i].pk) {
-                        innerhtml = innerhtml + tag("h4", fp.first_name);
-                    }
-
+    function updateTeams(teams, players) {
+        let innerhtml = "";
+        for (var i = 0; i < teams.length; i++) {
+            let f = teams[i].fields;
+            innerhtml = innerhtml + tag("h2", "Equipo: " + f.name);
+            for (let j = 0; j < players.length; j++) {
+                let fp = players[j].fields;
+                if (fp.team == teams[i].pk) {
+                    innerhtml = innerhtml + tag("h4", fp.first_name);
                 }
 
             }
-            $("#equipos").html(innerhtml);
+
         }
+        $("#equipos").html(innerhtml);
+    }
 
-        function tag(tg, content,) {
-            return "<" + tg + ">" + content + "</" + tg + ">";
+    function gameTick() {
+        if (pending == false) {
+
+            pending = true;
+            $.ajax({
+                url: '/ajax/getGameStatus?gameId=' + game,
+                method: 'GET',
+                success: function (data) {
+                    pending = false;
+                    muestraEquipos(JSON.parse(data['teams']), data['teamPoints']);
+                    muestraControl(data['referee'], data['turn']);
+                    checkTurno(data['turnMoment']);
+                    //--DONE..definir nueva ajax con actualizacion de puntos y turnos, nuevo set interval
+                    //--DONE--:definir jugador master como propiedad y que este elija el orden
+                    //--TODO: implementar sumador y restador de puntos para el siguiente del que le toca
+                    //implementar cronometro y sonido tilin
+                    //CSS
+                    //Proyecto más ambicioso: Añadir las cartas del tabú al juego.
+
+                },
+
+            });
         }
+    }
 
-        function tagat(tg, atr, content,) {
-            return "<" + tg + " " + atr + ">" + content + "</" + tg + ">";
+
+    function muestraControl(idArbitro, idTurno) {
+        if (idArbitro == getCookie("idPerson"))
+            $("#sumapuntos").removeAttr("hidden");
+        if (idTurno == getCookie("idPerson"))
+            $("#empezarturno").removeAttr("hidden");
+
+
+    }
+
+    function muestraEquipos(teams, teamPoints) {
+        let innerhtml = "";
+        for (let i = 0; i < teams.length; i++) {
+            innerhtml += tag("p", teams[i].fields.name + ":" + teamPoints[teams[i].pk]);
         }
+        $("#equiposPuntos").html(innerhtml);
+    }
 
 
+    function tag(tg, content,) {
+        return "<" + tg + ">" + content + "</" + tg + ">";
+    }
+
+    function tagat(tg, atr, content,) {
+        return "<" + tg + " " + atr + ">" + content + "</" + tg + ">";
+    }
 
 
 });

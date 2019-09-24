@@ -6,6 +6,7 @@ from .models import Game, Team, Person
 from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.db.models import Max
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 import numpy
 
@@ -77,7 +78,11 @@ def create_person(request):
             # redirect to a new URL:
             redirect = HttpResponseRedirect('/play/')
             redirect.set_cookie('idPerson', person.id)
-
+            if len(person.team.game.get_players()) == 1:
+                print("Eres el primero")
+                redirect.set_cookie('isMaster', True)
+            else:
+                redirect.set_cookie('isMaster', False)
             return redirect
 
     # if a GET (or any other method) we'll create a blank form
@@ -116,15 +121,42 @@ def start_game(request):
     return JsonResponse(data)
 
 
+def get_turno(game_id):
+    players = Game.objects.get(id=game_id).get_players()
+    try:
+        turno = players.get(turn=True).first()
+        return turno.id
+
+    except ObjectDoesNotExist:
+        return players.get(orden=1).id
+
+
 def get_game_status(request):
     game_id = request.GET.get('gameId', None);
     game = Game.objects.get(id=game_id)
-    print(list(game.get_teams()))
+    teams = game.get_teams()
+    turno = get_turno(game_id)
+    # El arbitro es el siguiente al jugador actual
+    arbitro = 0
+    if game.orderSelected:
+        arbitro = game.get_players().get(orden=2).id
+        try:
+            arbitro = Person.objects.get(orden=Person.objects.get(id=turno).orden + 1).id
+        except ObjectDoesNotExist and MultipleObjectsReturned:
+            pass
+    teampoints = {}
+    for t in teams:
+        teampoints[t.id] = t.get_points['points__sum']
+
     data = {
         'started': game.started,
         'orderSelected': game.orderSelected,
-        'teams': serializers.serialize('json', game.get_teams()),
-        'players': serializers.serialize('json', game.get_players())
+        'teams': serializers.serialize('json', teams),
+        'players': serializers.serialize('json', game.get_players()),
+        'turn': turno,
+        'teamPoints': teampoints,
+        'referee': arbitro,
+        'turnMoment': game.turnMoment,
     }
     return JsonResponse(data)
 
@@ -132,7 +164,10 @@ def get_game_status(request):
 def save_order(request):
     order = request.POST
     for o in order:
-        Person.objects.get(id=order[o]).orden = o
+        print(o)
+        p = Person.objects.get(id=order[o])
+        p.orden = o
+        p.save()
     game_id = request.GET.get('gameId', None);
     game = Game.objects.get(id=game_id)
     game.orderSelected = True
@@ -140,3 +175,11 @@ def save_order(request):
 
     return JsonResponse({'bien': 'bien'})
 
+
+def save_timer(request):
+    timer = request.POST.get('timer')
+    game = Game.objects.get(id=request.GET.get('gameId'))
+    game.turnMoment = timer
+    game.save()
+
+    return JsonResponse({'bien': 'bien'})
