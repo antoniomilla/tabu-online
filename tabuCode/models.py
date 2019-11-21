@@ -7,7 +7,7 @@ class Game(models.Model):
     started = models.BooleanField(default=False)
     orderSelected = models.BooleanField(default=False)
     turnMoment = models.IntegerField(default=None, blank=True, null=True)
-
+    round = models.IntegerField(default=0, blank=True, null=True)
     def get_teams(self):
         return Team.objects.filter(game_id=self.id)
 

@@ -1,4 +1,9 @@
+let CRONOTIME = 5; //Tiempo de turno en segundos
+let TIMETOCRONO = 2; //tiempo para que empiece el crono a partir de la pulsación, en segundos
+let GAMETICK = 300;// Tiempo para tick en ms
+
 $(document).ready(function () {
+
     function getCookie(name) {
         var value = "; " + document.cookie;
         var parts = value.split("; " + name + "=");
@@ -7,17 +12,22 @@ $(document).ready(function () {
 
     let pending = false;
 
-
     if (getCookie("isMaster") == 'True') {
         $("#empezar").removeAttr("disabled");
     }
+
     getStatus();
+
     let localgame = {
         started: false,
         orderSelected: false,
-        turnMoment: new Date().getTime() ,
+        turnMoment: "",
+        round: 0,
+        inround: false,
+        turn: 0,
 
     }
+
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             function getCookie(name) {
@@ -41,7 +51,47 @@ $(document).ready(function () {
                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             }
         }
+    }); //token django
+    $("#sumar").on("touchstart", function () {
+        if (localgame['inround'])
+            window.navigator.vibrate(100);
     });
+    $("#sumar").click(function () {
+        if (localgame['inround']) {
+
+            $.ajax({
+                url: '/ajax/addscore',
+                method: 'POST',
+                data: {
+                    person: getCookie("idPerson"),
+                    operator: "+",
+
+                },
+                success: function (data) {
+                    console.log("Petición de suma aceptada.")
+                },
+
+            });
+        }
+    });
+
+    $("#restar").click(function () {
+        if (localgame['inround'])
+            $.ajax({
+                url: '/ajax/addscore',
+                method: 'POST',
+                data: {
+                    person: getCookie("idPerson"),
+                    operator: "-",
+
+                },
+                success: function (data) {
+                    console.log("Petición de resta aceptada.")
+                },
+
+            });
+    });
+
     $("#empezar").click(function () {
         $.ajax({
             url: '/ajax/start-game',
@@ -59,24 +109,43 @@ $(document).ready(function () {
 
     });
 
-    function checkStart() {
-        $("#counter").text("20");
+    function startTimer() {
+        $("#counter").text(CRONOTIME);
         startCountdown();
     }
 
     function startCountdown() {
-        function countdown() {
-            console.log()
-            if (20*1000 - (new Date().getTime() - localgame['turnMoment']) <= 1000)
-            {
-                //si la cuenta ha terminado
-                clearInterval(localgame['countdownInterval']);
+        localgame['inround'] = true;
 
-            }
-        else
-            {
-                //si la cuenta sigue
-                $("#counter").text((20*1000 - (new Date().getTime() - localgame['turnMoment']))/1000 );
+
+        function countdown() {
+
+            let actual = parseInt($("#counter").text()) - 1;
+
+            $("#counter").text(actual);
+
+            if (actual === 0) {
+                //si la cuenta ha terminado
+
+                $("#counter").text("Turno acabado");
+                localgame['inround'] = false;
+                $("#empezarturno").removeAttr("disabled");
+                console.log(localgame['turn']);
+                if (localgame['turn'] == getCookie("idPerson"))
+                    $.ajax({
+                        url: '/ajax/next-round',
+                        method: 'POST',
+                        data: {
+                            person: getCookie("idPerson"),
+
+                        },
+                        success: function (data) {
+                            console.log("Petición de nueva ronda aceptada.")
+                        },
+
+                    });
+
+                clearInterval(localgame['countdownInterval']);
             }
 
         }
@@ -85,23 +154,25 @@ $(document).ready(function () {
 
     }
 
-    function checkTurno(turno) {
-
-
-        if (turno > localgame['turnMoment']) {
+    function checkTurno(turno, ronda) {
+        if (localgame['round'] == 0) { //si acabas de entrar te pones al dia con las rondas
+            localgame['round'] = ronda;
+        }
+        if (ronda != localgame['round']) { //si hay una nueva ronda inicia el temporizador
+            localgame['round'] = ronda;
             localgame['turnMoment'] = turno;
-            console.log(turno - new Date().getTime())
-            setTimeout(checkStart, turno - new Date().getTime());
+            console.log("Nueva ronda empieza en: " + turno)
+            setTimeout(startTimer, turno);
 
 
         }
     }
 
     $("#empezarturno").click(function () {
-        //marcar hora de empezado
-        var t = new Date();
+        $("#empezarturno").prop("disabled", true);
+
         //subir t a la api para que se lo diga a los demas
-        let timer = Math.floor(t.getTime() ) + 10*1000;
+        let timer = Math.floor(TIMETOCRONO * 1000);
         //cojo t de la api
         //localgame['momentInterval'] = setInterval(checkStart, 200)
 
@@ -120,9 +191,7 @@ $(document).ready(function () {
 
     });
 
-
     let initInterval = setInterval(getStatus, 4000);
-
 
     async function getStatus() {
         if (pending == false) {
@@ -213,7 +282,17 @@ $(document).ready(function () {
         $("#titulo").text("Partida en marcha");
         $("#ordenar").hide();
         gameTick();
-        setInterval(gameTick, 300);
+        while (true) {//mejorable con algun temporizador o algo, de momento bucle basto
+            let now = Date.now();
+            let nowMillis = now.toString().substring(10, now.toString().length);
+            if (parseInt(nowMillis) < 100) {
+                console.log(now);
+                setInterval(gameTick, GAMETICK);
+                break;
+            }
+
+
+        }
 
 
     }
@@ -246,11 +325,12 @@ $(document).ready(function () {
                     pending = false;
                     muestraEquipos(JSON.parse(data['teams']), data['teamPoints']);
                     muestraControl(data['referee'], data['turn']);
-                    checkTurno(data['turnMoment']);
+                    checkTurno(data['turnMoment'], data['round']);
                     //--DONE..definir nueva ajax con actualizacion de puntos y turnos, nuevo set interval
                     //--DONE--:definir jugador master como propiedad y que este elija el orden
-                    //--TODO: implementar sumador y restador de puntos para el siguiente del que le toca
-                    //implementar cronometro y sonido tilin
+                    //--DONE: implementar sumador y restador de puntos para el siguiente del que le toca
+                    //DONE: implementar cronometro
+                    // PENDIENTE: sonido tilin
                     //CSS
                     //Proyecto más ambicioso: Añadir las cartas del tabú al juego.
 
@@ -260,12 +340,25 @@ $(document).ready(function () {
         }
     }
 
-
     function muestraControl(idArbitro, idTurno) {
-        if (idArbitro == getCookie("idPerson"))
+            console.log("turno:"+idTurno);
+            console.log("arbitro:"+idArbitro);
+
+            localgame['turn'] = idTurno
+
+        if (idArbitro == getCookie("idPerson")) {
             $("#sumapuntos").removeAttr("hidden");
-        if (idTurno == getCookie("idPerson"))
+        }else{
+            $("#sumapuntos").attr("hidden","hidden");
+
+        }
+
+
+        if (idTurno == getCookie("idPerson")) {
             $("#empezarturno").removeAttr("hidden");
+        }else{
+            $("#empezarturno").attr("hidden","hidden");
+        }
 
 
     }
@@ -277,7 +370,6 @@ $(document).ready(function () {
         }
         $("#equiposPuntos").html(innerhtml);
     }
-
 
     function tag(tg, content,) {
         return "<" + tg + ">" + content + "</" + tg + ">";

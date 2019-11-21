@@ -69,8 +69,12 @@ def create_person(request):
         # check whether it's valid:
         if form.is_valid():
             person = form.save(commit=True)
-            person.orden = Person.objects.filter(team__in=person.team.game.get_teams()).aggregate(Max('orden'))[
-                               'orden__max'] + 1
+            if len(person.team.game.get_players()) == 1:
+                person.orden = 0
+            else:
+                person.orden = Person.objects.filter(team__in=person.team.game.get_teams()).aggregate(Max('orden'))[
+                                   'orden__max'] + 1
+
             person.save()
 
             # process the data in form.cleaned_data as required
@@ -124,11 +128,11 @@ def start_game(request):
 def get_turno(game_id):
     players = Game.objects.get(id=game_id).get_players()
     try:
-        turno = players.get(turn=True).first()
+        turno = players.get(turn=True)
         return turno.id
 
     except ObjectDoesNotExist:
-        return players.get(orden=1).id
+        return players.get(orden=0).id
 
 
 def get_game_status(request):
@@ -136,14 +140,14 @@ def get_game_status(request):
     game = Game.objects.get(id=game_id)
     teams = game.get_teams()
     turno = get_turno(game_id)
+    nronda = game.round;
     # El arbitro es el siguiente al jugador actual
-    arbitro = 0
+    arbitro=None
     if game.orderSelected:
-        arbitro = game.get_players().get(orden=2).id
         try:
-            arbitro = Person.objects.get(orden=Person.objects.get(id=turno).orden + 1).id
-        except ObjectDoesNotExist and MultipleObjectsReturned:
-            pass
+            arbitro = game.get_players().get(orden=Person.objects.get(id=turno).orden + 1).id
+        except:
+            arbitro = game.get_players().get(orden=0).id
     teampoints = {}
     for t in teams:
         teampoints[t.id] = t.get_points['points__sum']
@@ -157,6 +161,7 @@ def get_game_status(request):
         'teamPoints': teampoints,
         'referee': arbitro,
         'turnMoment': game.turnMoment,
+        'round': nronda,
     }
     return JsonResponse(data)
 
@@ -180,6 +185,51 @@ def save_timer(request):
     timer = request.POST.get('timer')
     game = Game.objects.get(id=request.GET.get('gameId'))
     game.turnMoment = timer
+    game.round = game.round + 1;
     game.save()
 
+    return JsonResponse({'bien': 'bien'})
+
+
+def manage_points(request):
+    personId = request.POST.get('person')
+    person = Person.objects.get(id=personId)
+
+    if request.POST.get('operator') == "+":
+        person.points = person.points + 1
+    else:
+        person.points = person.points - 1
+
+    person.save()
+
+    return JsonResponse({'bien': 'bien'})
+
+
+def next_player(p, personId):  # auxiliar, no API
+    p
+    actual = p.index(personId)
+    if len(p) != actual + 1:
+        return p[actual + 1]
+
+    return p[0]
+
+
+def next_round(request):
+    personid = request.POST.get('person')
+    person = Person.objects.get(id=personid)
+    person.turn = False
+    person.save()
+
+    players = Person.objects.all().filter(team__game_id=person.team.game_id)
+    try:
+        idnext = players.get(orden=person.orden + 1).id
+
+    except:
+        idnext = players.get(orden=0).id
+
+    personnext = Person.objects.get(id=idnext)
+    personnext.turn = True
+    personnext.save()
+
+    print("El nuevo turno es:",get_turno(person.team.game_id))
     return JsonResponse({'bien': 'bien'})
