@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="374cbdaa-5e97-4708-ae23-fcdafa5b58ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Antonio.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/play.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/play.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabu/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabu/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabuCode/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabuCode/templates/play.html" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/templates/play.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabuCode/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -127,7 +119,7 @@
       <workItem from="1569331899255" duration="5599000" />
       <workItem from="1569933739560" duration="212000" />
       <workItem from="1574291162885" duration="18000" />
-      <workItem from="1574291232921" duration="17031000" />
+      <workItem from="1574291232921" duration="17642000" />
     </task>
     <servers />
   </component>
