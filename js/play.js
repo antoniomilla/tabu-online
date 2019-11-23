@@ -109,6 +109,7 @@ $(document).ready(function () {
 
     });
 
+
     function startTimer() {
         $("#counter").text(CRONOTIME);
         startCountdown();

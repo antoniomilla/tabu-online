@@ -35,7 +35,7 @@ def create_game(request):
         print(datetime.today())
         form = GameForm()
         games = Game.objects.filter(created__gt=datetime.today() - timedelta(hours=1))  # started = false
-    return render(request, 'form.html', {'form': form, 'obj': 'game', 'list': games})
+    return render(request, 'form.html', {'form': form, 'obj': 'partida', 'list': games})
 
 
 def create_team(request):
@@ -58,46 +58,59 @@ def create_team(request):
         teams = Team.objects.filter(game_id=request.GET['gameId'])
         form = TeamForm({'game': request.GET['gameId'], 'name': 'e' + str(len(teams) + 1)})
 
-    return render(request, 'form.html', {'form': form, 'obj': 'team', 'list': teams})
+    return render(request, 'form.html', {'form': form, 'obj': 'equipo', 'list': teams})
 
 
 def create_person(request):
     # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = PersonForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            person = form.save(commit=True)
-            if len(person.team.game.get_players()) == 1:
-                person.orden = 0
-            else:
-                person.orden = Person.objects.filter(team__in=person.team.game.get_teams()).aggregate(Max('orden'))[
-                                   'orden__max'] + 1
-
-            person.save()
-
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            redirect = HttpResponseRedirect('/play/')
-            redirect.set_cookie('idPerson', person.id)
-            if len(person.team.game.get_players()) == 1:
-                print("Eres el primero")
-                redirect.set_cookie('isMaster', True)
-            else:
-                redirect.set_cookie('isMaster', False)
-            return redirect
 
     # if a GET (or any other method) we'll create a blank form
-    else:
-        persons = Person.objects.filter(team_id=request.GET['teamId'])
-        form = PersonForm({'team': request.GET['teamId'], 'first_name': 'j1'})
 
-    return render(request, 'form.html', {'form': form, 'obj': 'person', 'list': persons})
+    persons = Person.objects.filter(team_id=request.GET['teamId'])
+    form = PersonForm({'team': request.GET['teamId'], 'first_name': 'j1'})
+
+    return render(request, 'form.html', {'form': form, 'obj': 'jugador', 'list': persons})
+
+
+def handle_cookies(request):
+    # create a form instance and populate it with data from the request:
+    person = Person.objects.get(id=request.GET.get("idPerson"))
+
+    # process the data in form.cleaned_data as required
+    # ...
+    # redirect to a new URL:
+    redirect = HttpResponseRedirect('/play/')
+    redirect.set_cookie('idPerson', person.id)
+    if len(person.team.game.get_players()) == 1:
+        redirect.set_cookie('isMaster', True)
+    else:
+        redirect.set_cookie('isMaster', False)
+    return redirect
+
+
+def create_person_js(request):
+    # if this is a POST request we need to process the form data
+    person = Person(first_name=request.GET.get("name"), team_id=request.GET.get("teamId"))
+    # check whether it's valid:
+    if len(person.team.game.get_players()) == 0:
+        person.orden = 0
+    else:
+        person.orden = Person.objects.filter(team__in=person.team.game.get_teams()).aggregate(Max('orden'))[
+                           'orden__max'] + 1
+
+    person.save()
+
+    # redirect = HttpResponseRedirect('/play/')
+    # redirect.set_cookie('idPerson', person.id)
+    isMaster = False
+    if len(person.team.game.get_players()) == 1:
+        isMaster = True
+
+    return JsonResponse({'isMaster': isMaster, 'idPerson': person.id})
 
 
 def play(request):
+    print(request.COOKIES)
     idp = request.COOKIES['idPerson']
     team = Person.objects.get(id=idp).team
     game = team.game
@@ -142,7 +155,7 @@ def get_game_status(request):
     turno = get_turno(game_id)
     nronda = game.round;
     # El arbitro es el siguiente al jugador actual
-    arbitro=None
+    arbitro = None
     if game.orderSelected:
         try:
             arbitro = game.get_players().get(orden=Person.objects.get(id=turno).orden + 1).id
@@ -231,5 +244,19 @@ def next_round(request):
     personnext.turn = True
     personnext.save()
 
-    print("El nuevo turno es:",get_turno(person.team.game_id))
+    print("El nuevo turno es:", get_turno(person.team.game_id))
     return JsonResponse({'bien': 'bien'})
+
+
+def create_game_js(request):
+    g = Game()
+    g.save()
+
+    return JsonResponse({'game': g.id})
+
+
+def create_team_js(request):
+    t = Team(game_id=request.GET.get("gameId"), name=request.GET.get("name"))
+    t.save()
+
+    return JsonResponse({'team': t.id})

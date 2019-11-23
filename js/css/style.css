@@ -1,0 +1,180 @@
+@font-face {
+    font-family: 'MyWebFont';
+    src: url('/js/fonts/zig.ttf') format('embedded-opentype'),
+    url('/js/fonts/zig.ttf') format('truetype'); /* Safari, Android, iOS */
+
+}
+
+@font-face {
+    font-family: 'need';
+    src: url('/js/fonts/Need.ttf') format('embedded-opentype'),
+    url('/js/fonts/Need.ttf') format('truetype'); /* Safari, Android, iOS */
+
+}
+
+
+.titulo {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 10vw;
+    margin: 3vw;
+
+}
+
+.tabu {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 12vw;
+    margin: 3vw;
+    color: mediumpurple;
+    text-align: center;
+
+
+}
+
+.subtitulo {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 7vw;
+    margin: 3vw;
+}
+
+#partidas {
+
+    font-family: "MyWebFont";
+}
+
+.partida {
+    background-color: #263238;
+    font-size: 10vw;
+    border-radius: 50%;
+    width: 23vw;
+    height: 23vw;
+    text-align: center;
+    align-content: center;
+    vertical-align: center;
+    line-height: 23vw;
+    margin: 4vw;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    text-decoration: none;
+    color: white;
+
+
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+
+.persona {
+    color: white;
+    font-size: 4vh;
+    padding: 1vh;
+    font-family: MyWebFont;
+
+}
+
+
+.equipo {
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    width: 23vw;
+    height: 23vw;
+    text-align: center;
+    align-content: center;
+    vertical-align: center;
+    line-height: 23vw;
+    margin: 4vw;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    text-decoration: none;
+    color: #263238;
+
+}
+
+.create {
+    background-color: #263238;
+    font-size: 5vh;
+    border-radius: 50%;
+    width: 23vw;
+    height: 23vw;
+    text-align: center;
+    align-content: center;
+    vertical-align: center;
+    line-height: 23vw;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    text-decoration: none;
+    color: #FFFFFF;
+    margin: 0 auto;
+
+
+}
+
+#boton {
+    display: inline-block;
+}
+
+.creatediv {
+    position: fixed;
+    bottom: 2vh;
+    right: 5vw;
+    text-align: center;
+}
+
+.createtext {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 4vw;
+    background-color: #263238;
+    color: white;
+    border-radius: 100px;
+    padding: 0.3vh 2vw;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+
+}
+
+.equipos {
+    color: white;
+}
+
+.animacion {
+    animation-name: disminuyefuente, agrandacirculo;
+    animation-duration: 1s, 6s;
+    animation-fill-mode: forwards;
+
+}
+
+.contenedor {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+@keyframes disminuyefuente {
+    from {
+        font-size: 10vw;
+    }
+    to {
+        font-size: 0vw;
+        background-color: #263238;
+    }
+}
+
+@keyframes agrandacirculo {
+    from {
+    }
+    to {
+        transform: scale(50);
+
+    }
+}
+
+#nombre {
+    margin: 1vh;
+    bottom: 17vw;
+    position: relative;
+    border-radius: 7vw;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    height: 8vw;
+
+}

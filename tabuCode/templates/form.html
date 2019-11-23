@@ -1,38 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear {{ obj }}</title>
-</head>
-<body>
-<form action="/create-{{obj}}/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Create {{ obj }}">
-</form>
+<div lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-{% if obj == 'game' %}
-    <h2>Partidas creados en la última hora</h2>
-    {% for g in list %}
-        <p><a href="/create-team?gameId={{ g.id }}">{{ g.id }}</a></p>
-    {% endfor %}
-{% endif %}
+        <title>Crear {{ obj }}</title>
+        <link rel="stylesheet" type="text/css" href="/js/css/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-{% if obj == 'team' %}
-    <h2>Equipos en esta partida</h2>
-    {% for g in list %}
-        <p><a href="/create-person?teamId={{ g.id }}">{{ g.name }}</a></p>
-    {% endfor %}
-{% endif %}
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-{% if obj == 'person' %}
-    <h2>Tus futuros compañeros:</h2>
-    {% for g in list %}
-        <p>{{ g.first_name }}</p>
-    {% endfor %}
-    <br>
-{% endif %}
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </head>
+    <div class="creatediv">
 
-<p></p>
-</body>
-</html>
+
+        {% if obj != 'partida' %}
+            <input type="text" id="nombre" maxlength="10"/>
+        {% endif %}
+        <div id="boton">
+            <div class="create">+</div>
+            <div class="createtext"> Crear {{ obj }}</div>
+        </div>
+
+    </div>
+    <h1 class="tabu">TABÚ ONLINE</h1>
+    {% if obj == 'partida' %}
+
+        <h2 class="titulo">Salas creadas en la última hora</h2>
+        <div class="contenedor">
+            {% for g in list %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    </div>
+                    <div class="contenedor">
+                {% endif %}
+                <!--<div   id="partida" alt="100x100" data-holder-rendered="true"><a id="enlacepartida" href="/create-team?gameId={{ g.id }}">{{ g.id }}</a></div>-->
+                <div class="contenedor">
+                    <div class="partida" id="partida-{{ g.id }}">{{ g.id }}</div>
+                </div>
+
+
+
+
+            {% endfor %}
+            </div>
+    {% endif %}
+
+    {% if obj == 'equipo' %}
+        <script>document.body.style.backgroundColor = "#263238";</script>
+        <h2 class="titulo" style="color: white">Equipos en esta partida</h2>
+        <div class="contenedor">
+            {% for g in list %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    </div>
+                    <div class="contenedor">
+                {% endif %}
+
+                <!--<div class="equipo"><a href="/create-person?teamId={{ g.id }}">{{ g.name }}</a></div>>-->
+                <div class="contenedor">
+                    <div class="equipo" id="{{ g.id }}">{{ g.name }}</div>
+                </div>
+            {% endfor %}
+            </div>
+    {% endif %}
+
+    {% if obj == 'jugador' %}
+        <script>document.body.style.backgroundColor = "#263238";</script>
+        <h1 class="titulo" style="color: white">Crear usuario</h1>
+
+        <h2 class="subtitulo" style="color: #78909c">Tus futuros compañeros:</h2>
+
+        {% for g in list %}
+            <div class="persona">{{ g.first_name }}</div>
+        {% endfor %}
+        <br>
+    {% endif %}
+    <script type="text/javascript" src="/js/form.js"></script>
+
+    <p></p>
+    <div style="height: 30vw"></div>
+
+    </body>
+    </html>

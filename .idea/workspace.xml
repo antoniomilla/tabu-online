@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="374cbdaa-5e97-4708-ae23-fcdafa5b58ef" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/js/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/fonts/Need.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/fonts/zig.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/form.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/play.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/play.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabu/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/templates/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/templates/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/templates/play.html" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/templates/play.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,6 +44,7 @@
       <list>
         <option value="Python Script" />
         <option value="HTML File" />
+        <option value="CSS File" />
         <option value="JavaScript File" />
       </list>
     </option>
@@ -50,17 +61,18 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="jsx.switch.disabled" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Usuario\Desktop\s\tabu\js\img" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\js\fonts" />
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\js\css" />
       <recent name="C:\Users\Usuario\Desktop\s\tabu\js\img" />
       <recent name="C:\Users\Usuario\Desktop\s\tabu\media" />
       <recent name="C:\Users\Usuario\Desktop\s\tabu\static" />
-      <recent name="C:\Users\Usuario\Desktop\s\tabu\tabu" />
-      <recent name="C:\Users\Usuario\Desktop\s\tabu\tabuCode\static" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -119,7 +131,11 @@
       <workItem from="1569331899255" duration="5599000" />
       <workItem from="1569933739560" duration="212000" />
       <workItem from="1574291162885" duration="18000" />
-      <workItem from="1574291232921" duration="17642000" />
+      <workItem from="1574291232921" duration="17674000" />
+      <workItem from="1574390801942" duration="178000" />
+      <workItem from="1574390988980" duration="11436000" />
+      <workItem from="1574443617182" duration="9784000" />
+      <workItem from="1574465875847" duration="10154000" />
     </task>
     <servers />
   </component>
