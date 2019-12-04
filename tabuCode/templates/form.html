@@ -30,7 +30,7 @@
     <h1 class="tabu">TABÚ ONLINE</h1>
     {% if obj == 'partida' %}
 
-        <h2 class="titulo">Salas creadas en la última hora</h2>
+        <h2 class="titulo" style="color: black">Salas creadas en la última hora</h2>
         <div class="contenedor">
             {% for g in list %}
                 {% if forloop.counter0|divisibleby:3 %}
@@ -43,15 +43,13 @@
                 </div>
 
 
-
-
             {% endfor %}
             </div>
     {% endif %}
 
     {% if obj == 'equipo' %}
         <script>document.body.style.backgroundColor = "#263238";</script>
-        <h2 class="titulo" style="color: white">Equipos en esta partida</h2>
+        <h2 class="titulo" >Equipos en esta partida</h2>
         <div class="contenedor">
             {% for g in list %}
                 {% if forloop.counter0|divisibleby:3 %}
@@ -69,7 +67,7 @@
 
     {% if obj == 'jugador' %}
         <script>document.body.style.backgroundColor = "#263238";</script>
-        <h1 class="titulo" style="color: white">Crear usuario</h1>
+        <h1 class="titulo" >Crear usuario</h1>
 
         <h2 class="subtitulo" style="color: #78909c">Tus futuros compañeros:</h2>
 

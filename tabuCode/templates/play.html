@@ -2,15 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
     <title>Esperando a otros picaitos..</title>
 
     <script>order = {};
     contents = {};</script>
-    <link rel="./css/style.css" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="/js/css/style.css">
+            <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap" rel="stylesheet">
+
 </head>
 <body>
-<h1 id="titulo">Esperando picaitos</h1>
-<div id="equipos">
+
+<h1 class="tabu">TABÚ ONLINE</h1>
+<h2 id="tabu" class="titulo">Esperando picaitos</h2>
+<div id="equipos"class="">
 
     {% comment %}{% for t in teams %}
     <h2><u>{{ t.name }}</u></h2>
@@ -26,12 +32,15 @@
     <br><br>
 </div>
 
-<input type="button" value="Empezar partida" id="empezar" disabled/>
+<div class="create" id = "empezar" style="background: white;text-align: center" hidden>
+    <svg xmlns="http://www.w3.org/2000/svg" width="17vw" height="17vw" viewBox="0 0 23 23"><path d="M8 5v14l11-7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+</div>
 <div id="juego">
     <div id="timer">
     <p id="counter"></p>
     </div>
-    <div id="equiposPuntos">
+    <div id="equiposPuntos" class="contenedor">
+    <div id="equiposPuntos" class="contenedor">
 
     </div>
     <div id = "sumapuntos">

@@ -1,6 +1,4 @@
 $(document).ready(function () {
-
-
     $(".partida").click(function () {
         window.navigator.vibrate(100);
         let id = $(this).attr('id').split("-")[1];
@@ -116,7 +114,7 @@ $(document).ready(function () {
     function creaEquipo() {
 
         $.ajax({
-            url: '/ajax/getTeamCreated?gameId=' + location.search.split('gameId=')[1] + "&name=" + $("#nombre").val(),
+            url: '/ajax/getTeamCreated?gameId=' + location.search.split('gameId=')[1] + "&name=" + $("#nombre").val() ,
             method: 'GET',
             success: function (data) {
                 let id = data['team'];
@@ -129,6 +127,8 @@ $(document).ready(function () {
 
 
     }
+
+
 
 });
 

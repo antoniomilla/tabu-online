@@ -3,6 +3,7 @@ let TIMETOCRONO = 2; //tiempo para que empiece el crono a partir de la pulsació
 let GAMETICK = 300;// Tiempo para tick en ms
 
 $(document).ready(function () {
+    console.log(ctag("p", ['disabled="disabled"', 'align="center"'], "pruebaA"))
 
     function getCookie(name) {
         var value = "; " + document.cookie;
@@ -13,7 +14,7 @@ $(document).ready(function () {
     let pending = false;
 
     if (getCookie("isMaster") == 'True') {
-        $("#empezar").removeAttr("disabled");
+        $("#empezar").removeAttr("hidden");
     }
 
     getStatus();
@@ -30,6 +31,8 @@ $(document).ready(function () {
 
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
+            console.log(settings.url);
+
             function getCookie(name) {
                 var cookieValue = null;
                 if (document.cookie && document.cookie != '') {
@@ -93,19 +96,24 @@ $(document).ready(function () {
     });
 
     $("#empezar").click(function () {
-        $.ajax({
-            url: '/ajax/start-game',
-            method: 'POST',
-            data: {
-                start: 'true',
-                game: game,
 
-            },
-            success: function (data) {
-                console.log("Petición de empezar partida aceptada.")
-            },
+        $(this).toggleClass('animacion_empezar');
 
-        });
+        if (getCookie("isMaster") == 'True')
+
+            $.ajax({
+                url: '/ajax/start-game',
+                method: 'POST',
+                data: {
+                    start: 'true',
+                    game: game,
+
+                },
+                success: function (data) {
+                    console.log("Petición de empezar partida aceptada.")
+                },
+
+            });
 
     });
 
@@ -211,7 +219,6 @@ $(document).ready(function () {
                                 selectOrder(JSON.parse(data['players']));
                                 /*A partir de aqui hemos empezado la partida, iniciamos marcadores y ponemos tiempos*/
                                 /*obtener equipos y jugadores por ajax*/
-                                alert("empezamos el juego!");
                                 localgame['started'] = true;
                             }
                         } else {
@@ -270,7 +277,7 @@ $(document).ready(function () {
             $("#ordenar").html(innerhtml);
         } else {
             //si no eres el master muestra aviso
-            $("#ordenar").html("<p>El anfitrión está eligiendo el orden de los jugadores</p>");
+            $("#tabu").text("El anfitrión está elijiendo el orden");
         }
 
     }
@@ -302,14 +309,24 @@ $(document).ready(function () {
         let innerhtml = "";
         for (var i = 0; i < teams.length; i++) {
             let f = teams[i].fields;
-            innerhtml = innerhtml + tag("h2", "Equipo: " + f.name);
+
+            innerhtml = innerhtml + '</div>';
+            let par = i % 2 == 0;
+            if (par) {
+                innerhtml = innerhtml + '</div>' + '<div class="contenedor ">';
+            }
+
+            innerhtml = innerhtml + '<div class="equipos" style="color:' + f.color + ' ">';
+            innerhtml = innerhtml + tag("u", tag("h2", "" + f.name));
             for (let j = 0; j < players.length; j++) {
                 let fp = players[j].fields;
                 if (fp.team == teams[i].pk) {
-                    innerhtml = innerhtml + tag("h4", fp.first_name);
+                    innerhtml = innerhtml + "" + ctag("h4", ['class=""'], fp.first_name);
                 }
-
             }
+            if (par) {
+            }
+
 
         }
         $("#equipos").html(innerhtml);
@@ -331,8 +348,12 @@ $(document).ready(function () {
                     //--DONE--:definir jugador master como propiedad y que este elija el orden
                     //--DONE: implementar sumador y restador de puntos para el siguiente del que le toca
                     //DONE: implementar cronometro
+                    //fixes: poner formularios con post
+
                     // PENDIENTE: sonido tilin
                     //CSS
+
+                    //color aleatorio para los equipos
                     //Proyecto más ambicioso: Añadir las cartas del tabú al juego.
 
                 },
@@ -342,23 +363,23 @@ $(document).ready(function () {
     }
 
     function muestraControl(idArbitro, idTurno) {
-            console.log("turno:"+idTurno);
-            console.log("arbitro:"+idArbitro);
+        console.log("turno:" + idTurno);
+        console.log("arbitro:" + idArbitro);
 
-            localgame['turn'] = idTurno
+        localgame['turn'] = idTurno
 
         if (idArbitro == getCookie("idPerson")) {
             $("#sumapuntos").removeAttr("hidden");
-        }else{
-            $("#sumapuntos").attr("hidden","hidden");
+        } else {
+            $("#sumapuntos").attr("hidden", "hidden");
 
         }
 
 
         if (idTurno == getCookie("idPerson")) {
             $("#empezarturno").removeAttr("hidden");
-        }else{
-            $("#empezarturno").attr("hidden","hidden");
+        } else {
+            $("#empezarturno").attr("hidden", "hidden");
         }
 
 
@@ -377,6 +398,14 @@ $(document).ready(function () {
     }
 
     function tagat(tg, atr, content,) {
+        return "<" + tg + " " + atr + ">" + content + "</" + tg + ">";
+    }
+
+    function ctag(tg, arrs, content) {
+        let atr = "";
+        for (let i = 0; i < arrs.length; i++) {
+            atr = atr + arrs[i] + " ";
+        }
         return "<" + tg + " " + atr + ">" + content + "</" + tg + ">";
     }
 

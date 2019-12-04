@@ -2,14 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="374cbdaa-5e97-4708-ae23-fcdafa5b58ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/js/css/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/fonts/Need.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/fonts/zig.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/form.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/js/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/form.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/form.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/play.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/play.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tabu/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabu/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabu/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0002_auto_20190921_0419.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0003_auto_20190921_0420.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0004_auto_20190921_0426.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0005_game_created.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0006_game_started.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0007_person_orden.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0008_game_orderselected.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0009_person_turn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0010_auto_20190923_2020.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0011_game_turnmoment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0012_auto_20190924_0245.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0013_auto_20190924_0246.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0014_auto_20190924_0246.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0015_auto_20190924_0327.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/migrations/0016_game_round.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tabuCode/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tabuCode/templates/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/templates/form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tabuCode/templates/play.html" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/templates/play.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tabuCode/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/tabuCode/views.py" afterDir="false" />
@@ -36,6 +54,10 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="db" type="feb32156:DbDataSourceImpl" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="db [2]" type="feb32156:DbDataSourceImpl" />
+      </path>
     </expand>
     <select />
   </component>
@@ -60,19 +82,22 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="jsx.switch.disabled" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/js/img" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Usuario\Desktop\s\tabu\js\img" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\tabuCode" />
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu" />
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\tabu" />
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\tabuCode\templates" />
       <recent name="C:\Users\Usuario\Desktop\tabú\tabu\js\fonts" />
-      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\js\css" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\js\img" />
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\tabuCode\templates" />
+      <recent name="C:\Users\Usuario\Desktop\tabú\tabu\migrations" />
       <recent name="C:\Users\Usuario\Desktop\s\tabu\js\img" />
-      <recent name="C:\Users\Usuario\Desktop\s\tabu\media" />
-      <recent name="C:\Users\Usuario\Desktop\s\tabu\static" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -136,6 +161,11 @@
       <workItem from="1574390988980" duration="11436000" />
       <workItem from="1574443617182" duration="9784000" />
       <workItem from="1574465875847" duration="10154000" />
+      <workItem from="1574872884245" duration="1291000" />
+      <workItem from="1575309571605" duration="7733000" />
+      <workItem from="1575319603420" duration="3464000" />
+      <workItem from="1575325438751" duration="11653000" />
+      <workItem from="1575478574239" duration="6275000" />
     </task>
     <servers />
   </component>

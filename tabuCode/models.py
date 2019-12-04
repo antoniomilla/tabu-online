@@ -1,6 +1,11 @@
 from django.db import models
 from django.db.models import Max, Sum
 
+colors='4dd0e1,ffffa8,ffbb93,b2fab4,c7a4ff,ff94c2'
+
+def get_colors():
+    return []
+
 
 class Game(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -8,6 +13,11 @@ class Game(models.Model):
     orderSelected = models.BooleanField(default=False)
     turnMoment = models.IntegerField(default=None, blank=True, null=True)
     round = models.IntegerField(default=0, blank=True, null=True)
+    available_colors = models.CharField(default=colors, max_length=100)
+
+    def get_available_colors(self):
+        return self.available_colors.split(",")
+
     def get_teams(self):
         return Team.objects.filter(game_id=self.id)
 
@@ -34,6 +44,7 @@ class Game(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=30)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
+    color = models.CharField(max_length=7, default="#ffffff")
 
     def get_players(self):
         return Person.objects.filter(team_id=self.id)

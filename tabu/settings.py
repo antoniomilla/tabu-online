@@ -25,7 +25,7 @@ SECRET_KEY = 'nl$r10wj64n!f+fv&rwv=esgp&bvj1zs9a4hflunm0b#))hin5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.143']
+ALLOWED_HOSTS = ['192.168.1.128']
 
 
 # Application definition

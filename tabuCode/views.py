@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from django.http import JsonResponse
 from django.db.models import Max
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+import random
+from django.views.decorators.csrf import csrf_exempt
 
 import numpy
 
@@ -123,7 +125,7 @@ def play(request):
     flat_list.sort(key=lambda r: r.orden)
     return render(request, 'play.html', {'teams': teams, 'persons': flat_list, 'game': game.id})
 
-
+@csrf_exempt
 def start_game(request):
     start = request.POST.get('start');
     print(start)
@@ -256,7 +258,14 @@ def create_game_js(request):
 
 
 def create_team_js(request):
-    t = Team(game_id=request.GET.get("gameId"), name=request.GET.get("name"))
+    print("color:", request)
+    gameId = request.GET.get("gameId")
+    game = Game.objects.get(id=gameId)
+    color = random.choice(game.get_available_colors())
+    available = game.available_colors.replace(',' + color, '').replace(color + ',', '').replace(color, '')
+    game.available_colors = available
+    game.save()
+    t = Team(game_id=gameId, name=request.GET.get("name"), color="#" + color)
     t.save()
 
     return JsonResponse({'team': t.id})
